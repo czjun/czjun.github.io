@@ -845,7 +845,7 @@ const anzhiyu = {
       return;
     }
     const urlParams = new URLSearchParams(window.location.search);
-    const userId = "8152976493";
+    const userId = "2854978840";
     const userServer = "netease";
     const anMusicPageMeting = document.getElementById("anMusic-page-meting");
     if (urlParams.get("id") && urlParams.get("server")) {
@@ -878,7 +878,7 @@ const anzhiyu = {
     const anMusicSwitchingBtn = anMusicPage.querySelector("#anMusicSwitching");
     const metingAplayer = anMusicPage.querySelector("meting-js").aplayer;
     //初始化音量
-    metingAplayer.volume(0.8, true);
+    metingAplayer.volume(1.0, true);
     metingAplayer.on("loadeddata", function () {
       anzhiyu.changeMusicBg();
     });
