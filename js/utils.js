@@ -851,9 +851,9 @@ const anzhiyu = {
     if (urlParams.get("id") && urlParams.get("server")) {
       const id = urlParams.get("id");
       const server = urlParams.get("server");
-      anMusicPageMeting.innerHTML = `<meting-js id="${id}" server=${server} type="playlist" type="playlist" mutex="true" preload="auto" theme="var(--anzhiyu-main)" order="list" list-max-height="calc(100vh - 169px)!important"></meting-js>`;
+      anMusicPageMeting.innerHTML = `<meting-js id="${id}" server=${server} type="playlist" type="playlist" mutex="true" preload="auto" theme="var(--anzhiyu-main)" order="list" list-max-height="calc(100vh - 169px)!important" ></meting-js>`;
     } else {
-      anMusicPageMeting.innerHTML = `<meting-js id="${userId}" server="${userServer}" type="playlist" mutex="true" preload="auto" theme="var(--anzhiyu-main)" order="list" list-max-height="calc(100vh - 169px)!important"></meting-js>`;
+      anMusicPageMeting.innerHTML = `<meting-js id="${userId}" server="${userServer}" type="playlist" mutex="true" preload="auto" theme="var(--anzhiyu-main)" order="list" list-max-height="calc(100vh - 169px)!important" ></meting-js>`;
     }
     anzhiyu.changeMusicBg(false);
   },
@@ -878,7 +878,7 @@ const anzhiyu = {
     const anMusicSwitchingBtn = anMusicPage.querySelector("#anMusicSwitching");
     const metingAplayer = anMusicPage.querySelector("meting-js").aplayer;
     //初始化音量
-    metingAplayer.volume(1.0, true);
+    metingAplayer.volume(0.7, true);
     metingAplayer.on("loadeddata", function () {
       anzhiyu.changeMusicBg();
     });
