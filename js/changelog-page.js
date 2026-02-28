@@ -282,4 +282,7 @@
   window.renderChangelogPage = init;
   document.addEventListener("DOMContentLoaded", init);
   document.addEventListener("pjax:complete", init);
+  // In PJAX navigation, this script can be injected after pjax:complete fired.
+  // Run once immediately to avoid missing initial render and refresh button binding.
+  init();
 })();
