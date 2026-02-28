@@ -1,0 +1,13 @@
+# Hexo generated/cache
+public/
+.deploy_git/
+db.json
+
+# Dependencies
+node_modules/
+
+# Editor/OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
