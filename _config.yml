@@ -107,7 +107,7 @@ theme: anzhiyu
 deploy:
   type: git
   repo: https://github.com/czjun/czjun.github.io.git
-  branch: gh-pages
+  branch: refs/heads/gh-pages
 
 
 
@@ -161,4 +161,3 @@ envelope_comment:
 aplayer:
   meting: true
   asset_inject: true
-
