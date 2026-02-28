@@ -1,0 +1,151 @@
+#changelog-page {
+  margin-top: 12px;
+}
+
+.changelog-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.changelog-title {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.changelog-repo {
+  font-size: 0.95rem;
+  color: var(--anzhiyu-theme);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--anzhiyu-theme-op);
+}
+
+.changelog-subtitle {
+  margin: 8px 0 14px;
+  color: var(--anzhiyu-secondtext);
+}
+
+.changelog-status {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--anzhiyu-card-bg);
+  border: 1px solid var(--anzhiyu-card-border);
+  color: var(--anzhiyu-fontcolor);
+}
+
+.changelog-status.success {
+  border-color: #54a54f;
+}
+
+.changelog-status.warn {
+  border-color: #cc8d2d;
+}
+
+.changelog-status.error {
+  border-color: #cc4b4b;
+}
+
+.changelog-tree {
+  display: grid;
+  gap: 14px;
+}
+
+.changelog-day {
+  border: 1px solid var(--anzhiyu-card-border);
+  border-radius: 14px;
+  background: var(--anzhiyu-card-bg);
+  overflow: hidden;
+}
+
+.changelog-day-title {
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 1rem;
+  background: var(--anzhiyu-secondbg);
+}
+
+.changelog-list {
+  margin: 0;
+  padding: 14px 16px 6px;
+  list-style: none;
+}
+
+.changelog-item {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  column-gap: 10px;
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.changelog-item:last-child {
+  margin-bottom: 0;
+}
+
+.changelog-item::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 10px;
+  bottom: -12px;
+  width: 2px;
+  background: var(--anzhiyu-card-border);
+}
+
+.changelog-item:last-child::before {
+  display: none;
+}
+
+.changelog-dot {
+  width: 10px;
+  height: 10px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background: var(--anzhiyu-theme);
+  box-shadow: 0 0 0 3px var(--anzhiyu-theme-op-deep);
+}
+
+.changelog-card {
+  padding-bottom: 6px;
+}
+
+.changelog-message {
+  display: inline-block;
+  color: var(--anzhiyu-fontcolor);
+  text-decoration: none;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.changelog-message:hover {
+  color: var(--anzhiyu-theme);
+}
+
+.changelog-meta {
+  margin-top: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: var(--anzhiyu-secondtext);
+}
+
+.changelog-actions {
+  margin-top: 14px;
+}
+
+#changelog-refresh {
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(120deg, #1f8bff, #18b5b3);
+}
+
+#changelog-refresh:hover {
+  filter: brightness(1.05);
+}

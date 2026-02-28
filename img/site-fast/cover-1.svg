@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="cover 1">
+  <defs>
+    <linearGradient id="c1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#c1)"/>
+  <circle cx="1030" cy="190" r="180" fill="#ffffff" fill-opacity="0.12"/>
+  <text x="90" y="390" font-size="88" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif">Hexo Notes</text>
+</svg>
