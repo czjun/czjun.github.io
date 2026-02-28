@@ -4,6 +4,8 @@
 
   const PAGE_ID = "changelog-page";
   const CACHE_TTL = 15 * 60 * 1000;
+  const REQUEST_TIMEOUT = 20000;
+  const RETRY_DELAYS = [0, 1200];
 
   const toBoolean = (value) => String(value).toLowerCase() === "true";
 
@@ -59,22 +61,64 @@
     }
   };
 
-  const fetchJson = async (url) => {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000);
-    try {
-      const response = await fetch(url, {
-        headers: { Accept: "application/vnd.github+json" },
-        signal: controller.signal,
-      });
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error("HTTP " + response.status + " " + text.slice(0, 120));
-      }
-      return response.json();
-    } finally {
-      clearTimeout(timeout);
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const isAbortLikeError = (err) => {
+    if (!err) return false;
+    if (err.name === "AbortError") return true;
+    const msg = String(err.message || err);
+    return /aborted|abort/i.test(msg);
+  };
+
+  const normalizeFetchError = (err) => {
+    if (isAbortLikeError(err)) {
+      return new Error("请求 GitHub API 超时，请稍后重试。");
     }
+    const msg = String((err && err.message) || err || "");
+    if (/Failed to fetch|NetworkError|Load failed|fetch failed/i.test(msg)) {
+      return new Error("网络异常或请求被拦截，请检查是否可访问 api.github.com。");
+    }
+    return err instanceof Error ? err : new Error(msg || "未知错误");
+  };
+
+  const fetchJson = async (url) => {
+    let lastError = null;
+
+    for (let attempt = 0; attempt < RETRY_DELAYS.length; attempt += 1) {
+      if (RETRY_DELAYS[attempt] > 0) {
+        await sleep(RETRY_DELAYS[attempt]);
+      }
+
+      const controller = typeof AbortController === "function" ? new AbortController() : null;
+      const timeout = controller
+        ? setTimeout(() => {
+            try {
+              controller.abort("timeout");
+            } catch (err) {
+              controller.abort();
+            }
+          }, REQUEST_TIMEOUT)
+        : null;
+
+      try {
+        const response = await fetch(url, {
+          headers: { Accept: "application/vnd.github+json" },
+          cache: "no-store",
+          signal: controller ? controller.signal : undefined,
+        });
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error("HTTP " + response.status + " " + text.slice(0, 120));
+        }
+        return response.json();
+      } catch (err) {
+        lastError = err;
+      } finally {
+        if (timeout) clearTimeout(timeout);
+      }
+    }
+
+    throw normalizeFetchError(lastError);
   };
 
   const normalizeGitHubCommits = (rawItems, cfg) => {
@@ -175,11 +219,14 @@
   const parseConfig = (root) => ({
     repo: root.getAttribute("data-repo") || "",
     branch: root.getAttribute("data-branch") || "main",
-    perPage: Number(root.getAttribute("data-per-page") || 50),
+    perPage: Math.max(1, Math.min(100, Number(root.getAttribute("data-per-page") || 50) || 50)),
     showMerge: toBoolean(root.getAttribute("data-show-merge")),
   });
 
   const run = async (root, forceRefresh) => {
+    const runId = String((Number(root.getAttribute("data-run-id") || "0") || 0) + 1);
+    root.setAttribute("data-run-id", runId);
+
     const cfg = parseConfig(root);
     if (!cfg.repo) {
       setStatus(root, "未配置仓库，请在 _config.anzhiyu.yml 的 changelog.repo 填写 owner/repo。", "error");
@@ -200,16 +247,19 @@
 
     try {
       const result = await loadFromGitHub(cfg);
+      if (root.getAttribute("data-run-id") !== runId) return;
       writeCache(cfg, result);
       renderTree(root, result.items, cfg.repo);
       setStatus(root, "加载完成，来源: " + result.source, "success");
     } catch (err) {
+      if (root.getAttribute("data-run-id") !== runId) return;
+      const friendlyError = normalizeFetchError(err);
       const cache = readCache(cfg);
       if (cache) {
         renderTree(root, cache.items, cfg.repo);
-        setStatus(root, "GitHub 请求失败，已显示缓存数据。", "warn");
+        setStatus(root, "GitHub 请求失败，已显示缓存数据。原因: " + friendlyError.message, "warn");
       } else {
-        setStatus(root, "加载失败: " + err.message, "error");
+        setStatus(root, "加载失败: " + friendlyError.message, "error");
       }
     }
   };
