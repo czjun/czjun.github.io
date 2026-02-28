@@ -1,0 +1,30 @@
+- const changelogConfig = theme.changelog || {}
+- const repo = changelogConfig.repo || ''
+- const branch = changelogConfig.branch || 'main'
+- const perPage = changelogConfig.per_page || 50
+- const showMerge = changelogConfig.show_merge_commit === true ? 'true' : 'false'
+- const changelogEnabled = changelogConfig.enable !== false
+
+if changelogEnabled
+  link(rel='stylesheet' href=url_for('/css/changelog-page.css'))
+  #changelog-page(data-repo=repo data-branch=branch data-per-page=perPage data-show-merge=showMerge)
+    .changelog-head
+      h2.changelog-title 提交树
+      if repo
+        a.changelog-repo(href=`https://github.com/${repo}` target='_blank' rel='noopener')= repo
+      else
+        span.changelog-repo 未配置仓库
+    p.changelog-subtitle 基于 GitHub Commit API 实时读取，无需后端服务。
+    #changelog-status.changelog-status 正在加载提交记录...
+    #changelog-tree.changelog-tree
+    .changelog-actions
+      button#changelog-refresh(type='button') 刷新
+
+  script(data-pjax src=url_for('/js/changelog-page.js'))
+  script(data-pjax).
+    if (typeof window.renderChangelogPage === 'function') {
+      window.renderChangelogPage();
+    }
+else
+  .note.simple.info
+    p 你已关闭 changelog 功能，请在 `_config.anzhiyu.yml` 中将 `changelog.enable` 设为 `true`。

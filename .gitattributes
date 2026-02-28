@@ -1,0 +1,19 @@
+# Normalize line endings for text files in source repo
+* text=auto eol=lf
+
+# Keep Windows script line endings where expected
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary assets should never be modified by line-ending filters
+*.png -text
+*.jpg -text
+*.jpeg -text
+*.gif -text
+*.webp -text
+*.svg -text
+*.ico -text
+*.woff -text
+*.woff2 -text
+*.ttf -text
