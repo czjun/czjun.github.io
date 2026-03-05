@@ -38,6 +38,10 @@ nav:
           link: https://github.com/czjun/anime-character-guessr
           icon: https://image.czjun.top/2025/11/f5039eadcfa36ed6e1e72b336ce0484c.jpg
 
+        - name: openlist网盘
+          link: https://openlist.czjun.top/
+          icon: https://image.czjun.top/2026/03/ef4d74b6d5c3b7615ab486143fdf5d22.png
+
 # mourn （哀悼日，指定日期网站简单变灰，不包括滚动条）
 # 注意： 仅网站首页变灰，其他页面正常显示
 mourn:
